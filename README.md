@@ -1,17 +1,33 @@
-### Đây là đồ án cuối kỳ môn Xử lý dữ liệu lớn, với đề tài là GOM CỤM DỮ LIỆU BẰNG PHƯƠNG PHÁP HỌC SÂU KHÔNG GIÁM SÁT – DEEP UNSUPERVISED METHOD.
-### Mục tiêu của dự án là:
-Cải thiện kết quả phân cụm (clustering) trên các bộ dữ liệu phức tạp bằng cách sử dụng các phương pháp học sâu (deep learning) để trích xuất các đặc trưng quan trọng của dữ liệu trước khi áp dụng thuật toán gom cụm. Phân tích chuyên sâu nội dung
-### Đề tài đã nghiên cứu các phương pháp:
-Học sâu không giám sát phổ biến như Autoencoder (AE) và các biến thể (Variational Autoencoder - VAE, Denoising AE, Sparse AE), cùng với Generative Adversarial Network (GAN) và biến thể Bidirectional GAN (BiGAN).
-Phương pháp được đề xuất và triển khai là sử dụng Variational Autoencoder (VAE) để học cách biểu diễn dữ liệu (tạo latent codes), sau đó sử dụng Encoder của VAE để ánh xạ dữ liệu và áp dụng thuật toán gom cụm K-means với số cụm $k=10$.
-VAE được chọn vì nó giúp giảm hiện tượng overfitting so với AE thông thường và khắc phục được nhược điểm GAN collapse của GAN/BiGAN.
-#### Mô hình VAE:
-Encoder: Gồm 5 lớp Convolutional.
-Decoder: Gồm 4 lớp Conv2DTranspose.
-Latent Space (Bottleneck): Sử dụng 2 lớp mean và std để mã hóa dữ liệu thành một phân bố xác suất (khác với vector cố định của AE truyền thống).
-Hàm Loss: Bao gồm Reconstruction Loss (tái tạo đầu vào) và Regularization Loss (sử dụng KL divergence để đảm bảo phân bố xác suất).
-Thực nghiệm:
-Dữ liệu: Bộ dữ liệu Fashion MNIST (70,000 ảnh xám 28x28), chia 60,000 ảnh cho huấn luyện và 10,000 cho kiểm thử.
-Thông số: Số epoch là 20, batch size là 32.
-Công nghệ: Sử dụng Python 3.7 với các thư viện Keras, TensorFlow, matplotlib và sklearn.
-Đánh giá: Sử dụng hai chỉ số đo lường hiệu suất gom cụm là Adjusted Rand Index (ARI) và Fowlkes-Mallows Index.
+### Đây là đồ án cuối kỳ môn Nhập môn học máy, với đề tài là DỰ ĐOÁN GIÁ CỔ PHIẾU BẰNG CÁC MÔ HÌNH HỌC MÁY.
+#### Mục tiêu của dự án là:
+- Phân tích và đưa ra giải pháp dựa vào học máy để dự đoán giá cổ phiếu SHB trong tương lai.
+- Các mốc thời gian dự đoán: 14 ngày (theo ngày) và 7 tuần (theo tuần).
+- Cơ sở lý thuyết: Đề tài bắt đầu bằng việc giới thiệu về thị trường chứng khoán, khái niệm cổ phiếu, và các chỉ số tài chính cơ bản để đánh giá cổ phiếu (P/E, EPS, P/B, DPR).
+#### Phương pháp Nghiên cứu và Mô hình Học máy
+Đề tài tập trung vào việc áp dụng và so sánh hiệu suất của ba mô hình học máy (Machine Learning - ML) và học sâu (Deep Learning - DL) sau:
+- Mô hình Học máy Hồi quy (RNN - Recurrent Neural Network):
+  + Nghiên cứu kiến trúc, ưu nhược điểm của RNN, và ứng dụng trong các bài toán chuỗi thời gian.
+  + Xây dựng mô hình và thực hiện dự đoán theo cả ngày và tuần.
+- Mô hình Học máy Đa lớp (MLP - Multi-Layer Perceptron):
+  + Nghiên cứu kiến trúc và ứng dụng của MLP.
+  + Xây dựng mô hình và thực hiện dự đoán.
+- Mô hình Học sâu (LSTM - Long Short-Term Memory):
+  + Nghiên cứu khái niệm, so sánh với học máy, và đi sâu vào cấu trúc cổng của LSTM.
+  + Xây dựng mô hình LSTM để dự đoán giá cổ phiếu, tận dụng khả năng ghi nhớ dài hạn của mô hình này đối với dữ liệu chuỗi thời gian.
+#### Xử lý Dữ liệu và Kỹ thuật Tăng cường Hiệu suất
+- Thu thập Dữ liệu: Dữ liệu giao dịch của cổ phiếu SHB được thu thập từ trang web dstock.vndirect.com.vn thông qua API.
+- Chọn lọc Đặc trưng (Features): Các đặc trưng được sử dụng bao gồm:
+  + date (Ngày/Tháng/Năm)
+  + open (Giá mở cửa)
+  + ceilingPrice (Giá trần)
+  + floorPrice (Giá sàn)
+  + close (Giá đóng cửa)
+- Xây dựng Tập dữ liệu: Dữ liệu thô được xử lý thành hai tập dữ liệu riêng biệt:
+  + SHB_dataset_date.csv (dữ liệu theo ngày)
+  + SHB_dataset_week.csv (dữ liệu theo tuần, bằng cách gom nhóm theo tuần và tính trung bình các chỉ số).
+- Chống Overfitting: Đề tài đã nghiên cứu và áp dụng các phương pháp chống Overfitting (hiện tượng mô hình quá khớp dữ liệu huấn luyện) vào cả hai mô hình RNN và MLP, bao gồm:
+  + Validation
+  + Cross-validation
+  + Early stopping
+  + Dropout
+  + Regularization
